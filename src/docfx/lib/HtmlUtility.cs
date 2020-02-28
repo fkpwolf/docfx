@@ -26,7 +26,7 @@ namespace Microsoft.Docs.Build
             "big", "blockquote", "br", "caption", "center", "cite",
             "code", "col", "colgroup", "dd", "del", "dfn", "dir", "div", "dl", "dt",
             "em", "h1", "h2", "h3", "h4", "h5", "h6",
-            "hr", "i", "img", "ins", "label", "legend", "li", "map",
+            "hr", "i", "iframe", "img", "ins", "label", "legend", "li", "map",
             "ol", "p", "pre", "q", "s", "samp",
             "small", "span", "strike", "strong", "sub", "sup", "table",
             "tbody", "td", "tfoot", "th", "thead", "tr", "tt", "u",
@@ -46,9 +46,10 @@ namespace Microsoft.Docs.Build
             "align", "alt", "cite", "class", "colspan", "datetime", "decoding", "dir", "download", "headers", "height", "hidden",
             "href", "hreflang", "id", "name", "ping", "rel", "reversed", "rowspan", "scope", "shape", "sizes", "span", "spellcheck",
             "src", "srcset", "start", "summary", "tabindex", "target", "title", "translate", "value", "width",
+            "frameborder", "allowfullscreen",
 
             // docs specific attributes
-            "aria-controls", "aria-hidden", "aria-selected", "role",
+            "aria-controls", "aria-hidden", "aria-selected", "role", "highlight-lines"
         };
 
         private static readonly HashSet<string> s_allowedTableStyles = new HashSet<string>
