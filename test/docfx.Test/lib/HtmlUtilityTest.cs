@@ -46,6 +46,10 @@ namespace Microsoft.Docs.Build
         [InlineData("<div><style href='a'></div>", "<div></div>")]
         [InlineData("<div><link href='a'></div>", "<div></div>")]
         [InlineData("<div><script></script></div>", "<div></div>")]
+        [InlineData("<unknown></unknown><div></div>", "<div></div>")]
+        [InlineData("<div data-1></div>", "<div data-1></div>")]
+        [InlineData("<div data-1='2'></div>", "<div data-1='2'></div>")]
+        [InlineData("<img src='2' a b='c'></img>", "<img src='2'></img>")]
         public void HtmlStripTags(string input, string output)
         {
             var actual = HtmlUtility.LoadHtml(input).StripTags().WriteTo();
@@ -60,7 +64,7 @@ namespace Microsoft.Docs.Build
         [InlineData("<td style='text-align: left;'>", "<td style='text-align: left;'>")]
         [InlineData("<td style='text-align: center;'>", "<td style='text-align: center;'>")]
         [InlineData("<td style='text-align: right;'>", "<td style='text-align: right;'>")]
-        [InlineData("<table style='text-align: right;'>", "<table style='text-align: right;'>")]
+        [InlineData("<table style='text-align: right;'>", "<table/>")]
         [InlineData("<table style='text-align: right; background-color: yellow'>", "<table/>")]
         public void HtmlStripTableStyles(string input, string output)
         {

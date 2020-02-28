@@ -19,7 +19,42 @@ namespace Microsoft.Docs.Build
         private static readonly Func<HtmlAttribute, int> s_getValueStartIndex =
             ReflectionUtility.CreateInstanceFieldGetter<HtmlAttribute, int>("_valuestartindex");
 
-        private static readonly string[] s_allowedStyles = new[] { "text-align: right;", "text-align: left;", "text-align: center;" };
+        private static readonly HashSet<string> s_allowedTags = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            // https://developer.mozilla.org/en-US/docs/Web/HTML/Element
+            "a", "abbr", "acronym", "address", "area", "b",
+            "big", "blockquote", "br", "caption", "center", "cite",
+            "code", "col", "colgroup", "dd", "del", "dfn", "dir", "div", "dl", "dt",
+            "em", "h1", "h2", "h3", "h4", "h5", "h6",
+            "hr", "i", "img", "ins", "label", "legend", "li", "map",
+            "ol", "p", "pre", "q", "s", "samp",
+            "small", "span", "strike", "strong", "sub", "sup", "table",
+            "tbody", "td", "tfoot", "th", "thead", "tr", "tt", "u",
+            "ul", "var",
+            "section", "nav", "article", "aside", "header", "footer",
+            "figure", "figcaption",
+            "data", "time", "mark", "ruby", "rt", "rp", "bdi", "wbr",
+            "details", "summary",
+
+            // docs specific tags
+            "image"
+        };
+
+        private static readonly HashSet<string> s_allowedAttributes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes
+            "align", "alt", "cite", "class", "colspan", "datetime", "decoding", "dir", "download", "headers", "height", "hidden",
+            "href", "hreflang", "id", "name", "ping", "rel", "reversed", "rowspan", "scope", "shape", "sizes", "span", "spellcheck",
+            "src", "srcset", "start", "summary", "tabindex", "target", "title", "translate", "value", "width",
+
+            // docs specific attributes
+            "aria-controls", "aria-hidden", "aria-selected", "role", 
+        };
+
+        private static readonly HashSet<string> s_allowedTableStyles = new HashSet<string>
+        {
+            "text-align: right;", "text-align: left;", "text-align: center;",
+        };
 
         public static HtmlNode LoadHtml(string html)
         {
@@ -314,24 +349,44 @@ namespace Microsoft.Docs.Build
         internal static HtmlNode StripTags(this HtmlNode html)
         {
             var nodesToRemove = new List<HtmlNode>();
+            var attributesToRemove = new List<HtmlAttribute>();
 
             foreach (var node in html.DescendantsAndSelf())
             {
-                if (node.Name.Equals("script", StringComparison.OrdinalIgnoreCase) ||
-                    node.Name.Equals("link", StringComparison.OrdinalIgnoreCase) ||
-                    node.Name.Equals("style", StringComparison.OrdinalIgnoreCase))
+                if (node.NodeType != HtmlNodeType.Element)
+                {
+                    continue;
+                }
+
+                if (!s_allowedTags.Contains(node.Name))
                 {
                     nodesToRemove.Add(node);
                 }
                 else
                 {
-                    if (node.Name != "th" && node.Name != "td" && node.Attributes.Contains("style"))
+                    attributesToRemove.Clear();
+                    foreach (var attribute in node.Attributes)
                     {
-                        var value = node.Attributes["style"].Value ?? "";
-                        if (!s_allowedStyles.Any(l => l == value))
+                        if (attribute.Name.StartsWith("data-", StringComparison.OrdinalIgnoreCase))
                         {
-                            node.Attributes.Remove("style");
+                            continue;
                         }
+                        else if (string.Equals(attribute.Name, "style"))
+                        {
+                            if ((node.Name != "th" && node.Name != "td") || !s_allowedTableStyles.Contains(attribute.Value))
+                            {
+                                attributesToRemove.Add(attribute);
+                            }
+                        }
+                        else if (!s_allowedAttributes.Contains(attribute.Name))
+                        {
+                            attributesToRemove.Add(attribute);
+                        }
+                    }
+
+                    foreach (var attribute in attributesToRemove)
+                    {
+                        node.Attributes.Remove(attribute);
                     }
                 }
             }

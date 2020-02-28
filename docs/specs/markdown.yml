@@ -478,9 +478,9 @@ outputs:
   docs/a.json: |
     { "conceptual": "<a href='javascript:window.open(&quot;https://shell.azure.com&quot;, &quot;_blank&quot;, &quot;toolbar=no,scrollbars=yes,resizable=yes,menubar=no,location=no,status=no&quot;)'>"}
   docs/b.json: |
-    { "conceptual": "<p><a onclick=\"javascript:window.open('https://shell.azure.com', '_blank', 'toolbar=no,scrollbars=yes,resizable=yes,menubar=no,location=no,status=no')\"><image src='https://shell.azure.com/images/launchcloudshell.png'></image></a></p>\n" }
+    { "conceptual": "<p><a><image src='https://shell.azure.com/images/launchcloudshell.png'></image></a></p>\n" }
   docs/c.json: |
-    { "conceptual": "<p><a onclick='javascript:window.open(\"https://shell.azure.com\", \"_blank\", \"toolbar=no,scrollbars=yes,resizable=yes,menubar=no,location=no,status=no\")'><image src=\"https://shell.azure.com/images/launchcloudshell.png\"></image></a></p>\n" }
+    { "conceptual": "<p><a><image src=\"https://shell.azure.com/images/launchcloudshell.png\"></image></a></p>\n" }
 ---
 # yaml header shouldn't be array
 inputs:
