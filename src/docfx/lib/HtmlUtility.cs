@@ -37,7 +37,7 @@ namespace Microsoft.Docs.Build
             "details", "summary",
 
             // docs specific tags
-            "image"
+            "image",
         };
 
         private static readonly HashSet<string> s_allowedAttributes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -48,7 +48,7 @@ namespace Microsoft.Docs.Build
             "src", "srcset", "start", "summary", "tabindex", "target", "title", "translate", "value", "width",
 
             // docs specific attributes
-            "aria-controls", "aria-hidden", "aria-selected", "role", 
+            "aria-controls", "aria-hidden", "aria-selected", "role",
         };
 
         private static readonly HashSet<string> s_allowedTableStyles = new HashSet<string>
