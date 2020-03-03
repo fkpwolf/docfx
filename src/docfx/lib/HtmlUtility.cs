@@ -49,7 +49,7 @@ namespace Microsoft.Docs.Build
             "frameborder", "allowfullscreen",
 
             // docs specific attributes
-            "aria-controls", "aria-hidden", "aria-selected", "role", "highlight-lines", "renderon"
+            "aria-controls", "aria-hidden", "aria-selected", "role", "highlight-lines", "renderon",
         };
 
         private static readonly HashSet<string> s_allowedTableStyles = new HashSet<string>
