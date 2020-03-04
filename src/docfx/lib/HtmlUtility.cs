@@ -27,7 +27,7 @@ namespace Microsoft.Docs.Build
         private static readonly HashSet<string> s_allowedAttributes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes
-            "class", "dir", "hidden", "id,", "itemid", "itemprop", "itemref", "itemscope", "itemtype,",
+            "class", "dir", "hidden", "id", "itemid", "itemprop", "itemref", "itemscope", "itemtype,",
             "lang", "part", "slot", "spellcheck", "tabindex", "title", "cite", "value", "reversed",
             "start", "download", "href", "hreflang", "ping", "rel", "target", "type", "datetime",
             "alt", "decoding", "height", "intrinsicsize", "loading", "sizes", "src", "width",
