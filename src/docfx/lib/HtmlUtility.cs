@@ -35,7 +35,7 @@ namespace Microsoft.Docs.Build
             "name", "referrerpolicy", "sandbox", "srcdoc",
 
             // docs specific attributes
-            "role", "highlight-lines" 
+            "role", "highlight-lines",
         };
 
         private static readonly HashSet<string> s_allowedTableStyles = new HashSet<string>
