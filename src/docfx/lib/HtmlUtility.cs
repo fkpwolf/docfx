@@ -30,10 +30,10 @@ namespace Microsoft.Docs.Build
             "align", "alt", "cite", "class", "colspan", "datetime", "decoding", "dir", "download", "headers", "height", "hidden",
             "href", "hreflang", "id", "name", "ping", "rel", "reversed", "rowspan", "scope", "shape", "sizes", "span", "spellcheck",
             "src", "srcset", "start", "summary", "tabindex", "target", "title", "translate", "value", "width",
-            "frameborder", "allowfullscreen",
+            "frameborder", "allowfullscreen", "valign", "allow",
 
             // docs specific attributes
-            "aria-controls", "aria-hidden", "aria-selected", "role", "highlight-lines", "renderon",
+            "aria-controls", "aria-hidden", "aria-selected", "role", "highlight-lines", "renderon", 
         };
 
         private static readonly HashSet<string> s_allowedTableStyles = new HashSet<string>
