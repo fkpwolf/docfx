@@ -19,25 +19,9 @@ namespace Microsoft.Docs.Build
         private static readonly Func<HtmlAttribute, int> s_getValueStartIndex =
             ReflectionUtility.CreateInstanceFieldGetter<HtmlAttribute, int>("_valuestartindex");
 
-        private static readonly HashSet<string> s_allowedTags = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        private static readonly HashSet<string> s_disallowedTags = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            // https://developer.mozilla.org/en-US/docs/Web/HTML/Element
-            "a", "abbr", "acronym", "address", "area", "b",
-            "big", "blockquote", "br", "caption", "center", "cite",
-            "code", "col", "colgroup", "dd", "del", "dfn", "dir", "div", "dl", "dt",
-            "em", "h1", "h2", "h3", "h4", "h5", "h6",
-            "hr", "i", "iframe", "img", "ins", "label", "legend", "li", "map",
-            "ol", "p", "pre", "q", "s", "samp",
-            "small", "span", "strike", "strong", "sub", "sup", "table",
-            "tbody", "td", "tfoot", "th", "thead", "tr", "tt", "u",
-            "ul", "var",
-            "section", "nav", "article", "aside", "header", "footer",
-            "figure", "figcaption",
-            "data", "time", "mark", "ruby", "rt", "rp", "bdi", "wbr",
-            "details", "summary",
-
-            // docs specific tags
-            "image",
+            "script", "link", "style",
         };
 
         private static readonly HashSet<string> s_allowedAttributes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -359,7 +343,7 @@ namespace Microsoft.Docs.Build
                     continue;
                 }
 
-                if (!s_allowedTags.Contains(node.Name))
+                if (s_disallowedTags.Contains(node.Name))
                 {
                     nodesToRemove.Add(node);
                 }

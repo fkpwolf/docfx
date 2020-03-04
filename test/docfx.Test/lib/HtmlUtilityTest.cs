@@ -46,7 +46,7 @@ namespace Microsoft.Docs.Build
         [InlineData("<div><style href='a'></div>", "<div></div>")]
         [InlineData("<div><link href='a'></div>", "<div></div>")]
         [InlineData("<div><script></script></div>", "<div></div>")]
-        [InlineData("<unknown></unknown><div></div>", "<div></div>")]
+        [InlineData("<unknown></unknown><div></div>", "<unknown></unknown><div></div>")]
         [InlineData("<div data-1></div>", "<div data-1></div>")]
         [InlineData("<div data-1='2'></div>", "<div data-1='2'></div>")]
         [InlineData("<img src='2' a b='c'></img>", "<img src='2'></img>")]
