@@ -19,14 +19,14 @@ Content authors can embed arbitrary HTML tags to markdown documents. These HTML 
 
 ## Technical Design
 
-The HTML processing pipeline in build gives us a chance to consistently apply certain HTML transformations to user input. There are two approaches to filter HTML tags and HTML attributes, _allowlist_ vs _disallowlist_.
-The current HTML sanitizer in docfx uses _disallowlist_ to strip out `<script>`, `<link>`, `<style>` tags and `style` attributes. This alone won't provide enough protection against javascript injection. The prefered approach is to use _allowlist_ for both HTML tags and attributes, and this is what most HTML sanitizers do. 
+The HTML processing pipeline in build gives us a chance to consistently apply certain HTML transformations to user input. There are two approaches to filter HTML tags and HTML attributes, _allow list_ vs _disallow list_.
+The current HTML sanitizer in docfx uses _disallow list_ to strip out `<script>`, `<link>`, `<style>` tags and `style` attributes. This alone won't provide enough protection against javascript injection. The preferred approach is to use _allow list_ for both HTML tags and attributes, and this is what most HTML sanitizers do. 
 
 #### Sanitize HTML Tags
 
-Using _allowlist_ for HTML tags is very likely to cause content visual diffs. Sometimes writers surround text (especially variables) with angle bracket not knowing they are treated as HTML tags. These tags can appear as a standalone tag (without closing tag) and be parsed into an incorrect HTML DOM tree. Removing these tags can cause a huge chunk of content to be stripped from output.
+Using _allow list_ for HTML tags is very likely to cause content visual diffs. Sometimes writers surround text (especially variables) with angle bracket not knowing they are treated as HTML tags. These tags can appear as a standalone tag (without closing tag) and be parsed into an incorrect HTML DOM tree. Removing these tags can cause a huge chunk of content to be stripped from output.
 
-The danger of using _allowlist_ for HTML tags overweight it's advantage at this time period, so we keep using the current _disallowlist_ approach for HTML tags. The disallowed HTML tags are:
+The danger of using _allow list_ for HTML tags overweight its advantage at this time period, so we keep using the current _disallow list_ approach for HTML tags. The disallowed HTML tags are:
 
 - `<script>`
 - `<link>`
@@ -34,11 +34,11 @@ The danger of using _allowlist_ for HTML tags overweight it's advantage at this 
 
 #### Sanitize HTML attribute
 
-For HTML attributes, we _MUST_ use _allowlist_ because attributes that allow javascript execution is an open set.
+For HTML attributes, we _MUST_ use _allow list_ because attributes that allow javascript execution is an open set.
 
-For reference, https://developer.mozilla.org/en-US/docs/Web/Events lists all the possible DOM events, some of them are standard events, but it also contains lots of non-standard events that are browser specific. Some non-stardard events are prefixed with `moz`, but others aren't like `dataError`.
+For reference, https://developer.mozilla.org/en-US/docs/Web/Events lists all the possible DOM events, some of them are standard events, but it also contains lots of non-standard events that are browser specific. Some non-standard events are prefixed with `moz`, but others aren't like `dataError`.
 
-The HTML attribute allowlist is defined as the sum of:
+The HTML attribute allow list is defined as the sum of:
 
 - Standard HTML5 attributes for allowed HTML tag names.
 - Attribute names starting with `data-`.
@@ -54,7 +54,7 @@ To prevent script execution like `<a href="javascript://void">`, only `http://` 
 
 ## Dependencies
 
-The ruleout of this feature impact v3 migration tool since there are likely HTML diffs.
+The rollout of this feature impact v3 migration tool since there are likely HTML diffs.
 We can either make the change simultaneously in v2 and v3, or change the v3 migration tool to ignore these diffs.
 
 ## Appendix
@@ -62,10 +62,10 @@ We can either make the change simultaneously in v2 and v3, or change the v3 migr
 #### HTML5 attribute name allowlist
 
 - This list is based on https://developer.mozilla.org/en-US/docs/Web/HTML/Element.
-- This list exclude experimental and obsolete attributes.
-- This list exclude user interactive DOM elements and attributes (like `<button>`, `<menu>`).
-- This list exclude media DOM elements (like `<video>`, `<audio>`).
-- This list exclude DOM elements that are affect main site structure (like `<body>` and `<header>`)
+- This list excludes experimental and obsolete attributes.
+- This list excludes user interactive DOM elements and attributes (like `<button>`, `<menu>`).
+- This list excludes media DOM elements (like `<video>`, `<audio>`).
+- This list excludes DOM elements that affect main site structure (like `<body>` and `<header>`)
 
 **Global attributes**
 

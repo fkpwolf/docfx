@@ -64,6 +64,7 @@ namespace Microsoft.Docs.Build
         [InlineData("<td style='text-align: left;'>", "<td style='text-align: left;'>")]
         [InlineData("<td style='text-align: center;'>", "<td style='text-align: center;'>")]
         [InlineData("<td style='text-align: right;'>", "<td style='text-align: right;'>")]
+        [InlineData("<td style='text-align: right; blahblahblah?'>", "<td>")]
         [InlineData("<table style='text-align: right;'>", "<table/>")]
         [InlineData("<table style='text-align: right; background-color: yellow'>", "<table/>")]
         public void HtmlStripTableStyles(string input, string output)
