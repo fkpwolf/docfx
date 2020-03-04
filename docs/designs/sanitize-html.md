@@ -42,6 +42,7 @@ The HTML attribute allowlist is defined as the sum of:
 
 - Standard HTML5 attributes for allowed HTML tag names.
 - Attribute names starting with `data-`.
+- Attribute names starting with `aria-`, used for improving accessibility.
 - Existing attribute names respected by `docs-ui` that does not have `data-` prefix.
 
 > ‼️ Due to how the HTML processing pipeline works today, we cannot tell _user HTML_ from _system generated HTML_, so this sanitizer works for both. 
@@ -60,8 +61,93 @@ We can either make the change simultaneously in v2 and v3, or change the v3 migr
 
 #### HTML5 attribute name allowlist
 
-TBD:
+- This list is based on https://developer.mozilla.org/en-US/docs/Web/HTML/Element.
+- This list exclude experimental and obsolete attributes.
+- This list exclude user interactive DOM elements and attributes (like `<button>`, `<menu>`).
+- This list exclude media DOM elements (like `<video>`, `<audio>`).
+- This list exclude DOM elements that are affect main site structure (like `<body>` and `<header>`)
 
-#### docs-ui non-standard attribute name allowlist
+**Global attributes**
 
-TBD:
+```html
+class, dir, hidden, id,
+itemid, itemprop, itemref, itemscope, itemtype,
+lang, part, slot, spellcheck, tabindex, title
+```
+
+**Attributes by element name**
+
+```html
+<!-- Content sectioning -->
+<address>: 
+<h1>-<h6>: 
+<section>:
+
+<!-- Text content -->
+<blockquote>: cite
+<dd>:
+<div>:
+<dl>:
+<dt>:
+<figcaption>:
+<figure>:
+<hr>:
+<li>: value
+<ol>: reversed, start, type
+<p>:
+<pre>:
+<ul>:
+
+<!-- Inline text semantics -->
+<a>: download, href, hreflang, ping, rel, target, type
+<abbr>:
+<b>:
+<bdi>:
+<bdo>:
+<br>:
+<cite>:
+<code>:
+<data>: value
+<dfn>:
+<em>:
+<i>:
+<mark>:
+<q>: cite
+<s>:
+<samp>:
+<small>:
+<span>:
+<strong>:
+<sub>:
+<sup>:
+<time>: datetime
+<u>:
+<var>:
+
+<!-- Image and multimedia -->
+<img>: alt, decoding, height, intrinsicsize, loading, sizes, src, width
+
+<!-- Demarcating edits -->
+<del>: cite, datetime
+<ins>: cite, datetime
+
+<!-- table -->
+<caption>:
+<col>:
+<colgroup>:
+<table>:
+<tbody>:
+<td>: colspan, headers, rowspan
+<tfoot>:
+<th>: abbr, colspan, headers, rowspan, scope
+<thead>:
+<tr>:
+
+<pre>:
+<iframe>: allow, allowfullscreen, allowpaymentrequest, height, name, referrerpolicy, sandbox, src, srcdoc, width
+```
+
+#### Docs non-standard attribute name allowlist
+
+- role
+- highlight-lines

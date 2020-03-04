@@ -27,13 +27,15 @@ namespace Microsoft.Docs.Build
         private static readonly HashSet<string> s_allowedAttributes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes
-            "align", "alt", "cite", "class", "colspan", "datetime", "decoding", "dir", "download", "headers", "height", "hidden",
-            "href", "hreflang", "id", "name", "ping", "rel", "reversed", "rowspan", "scope", "shape", "sizes", "span", "spellcheck",
-            "src", "srcset", "start", "summary", "tabindex", "target", "title", "translate", "value", "width",
-            "frameborder", "allowfullscreen", "valign", "allow",
+            "class", "dir", "hidden", "id,", "itemid", "itemprop", "itemref", "itemscope", "itemtype,",
+            "lang", "part", "slot", "spellcheck", "tabindex", "title", "cite", "value", "reversed",
+            "start", "download", "href", "hreflang", "ping", "rel", "target", "type", "datetime",
+            "alt", "decoding", "height", "intrinsicsize", "loading", "sizes", "src", "width",
+            "abbr", "colspan", "headers", "rowspan", "scope", "allow", "allowfullscreen", "allowpaymentrequest",
+            "name", "referrerpolicy", "sandbox", "srcdoc",
 
             // docs specific attributes
-            "aria-controls", "aria-hidden", "aria-selected", "role", "highlight-lines", "renderon", 
+            "role", "highlight-lines" 
         };
 
         private static readonly HashSet<string> s_allowedTableStyles = new HashSet<string>
@@ -352,7 +354,8 @@ namespace Microsoft.Docs.Build
                     attributesToRemove.Clear();
                     foreach (var attribute in node.Attributes)
                     {
-                        if (attribute.Name.StartsWith("data-", StringComparison.OrdinalIgnoreCase))
+                        if (attribute.Name.StartsWith("data-", StringComparison.OrdinalIgnoreCase) ||
+                            attribute.Name.StartsWith("aria-", StringComparison.OrdinalIgnoreCase))
                         {
                             continue;
                         }
