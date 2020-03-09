@@ -42,8 +42,8 @@ The HTML attribute allow list is defined as the sum of:
 
 - Standard HTML5 attributes for allowed HTML tag names.
 - Attribute names starting with `data-`.
-- Attribute names starting with `aria-`, used for improving accessibility.
-- Existing attribute names respected by `docs-ui` that does not have `data-` prefix.
+- Accessibility attributes: `role` and names starting with `aria-`.
+- Existing attribute names respected by `docs-ui` that does not have `data-` prefix: `highlight-lines`
 
 > ‼️ Due to how the HTML processing pipeline works today, we cannot tell _user HTML_ from _system generated HTML_, so this sanitizer works for both. 
 All new `docs-ui` features that depend on build output with custom HTML attributes __MUST__ use `data-` prefix, overwise they'll be stripped by the sanitizer. 
@@ -146,8 +146,3 @@ lang, part, slot, spellcheck, tabindex, title
 <pre>:
 <iframe>: allow, allowfullscreen, allowpaymentrequest, height, name, referrerpolicy, sandbox, src, srcdoc, width
 ```
-
-#### Docs non-standard attribute name allowlist
-
-- role
-- highlight-lines

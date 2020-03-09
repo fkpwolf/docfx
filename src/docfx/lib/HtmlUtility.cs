@@ -32,10 +32,10 @@ namespace Microsoft.Docs.Build
             "start", "download", "href", "hreflang", "ping", "rel", "target", "type", "datetime",
             "alt", "decoding", "height", "intrinsicsize", "loading", "sizes", "src", "width",
             "abbr", "colspan", "headers", "rowspan", "scope", "allow", "allowfullscreen", "allowpaymentrequest",
-            "name", "referrerpolicy", "sandbox", "srcdoc",
+            "name", "referrerpolicy", "sandbox", "srcdoc", "role",
 
             // docs specific attributes
-            "role", "highlight-lines",
+            "highlight-lines",
         };
 
         private static readonly HashSet<string> s_allowedTableStyles = new HashSet<string>
