@@ -223,7 +223,11 @@ namespace Microsoft.Docs.Build
             var (markupErrors, html) = context.MarkdownEngine.ToHtml(content, file, MarkdownPipelineType.Markdown);
             errors.AddRange(markupErrors);
 
-            var htmlDom = HtmlUtility.LoadHtml(html).PostMarkup(context.Config.DryRun);
+            var rawHtmlDom = HtmlUtility.LoadHtml(html);
+            var htmlErrors = HtmlUtility.ScanDirtyNode(rawHtmlDom);
+            errors.AddRange(htmlErrors);
+
+            var htmlDom = rawHtmlDom.PostMarkup(context.Config.DryRun);
             ValidateBookmarks(context, file, htmlDom);
             if (!HtmlUtility.TryExtractTitle(htmlDom, out var title, out var rawTitle))
             {
@@ -247,6 +251,8 @@ namespace Microsoft.Docs.Build
                 RawTitle = rawTitle,
                 Title = userMetadata.Title ?? title,
             });
+
+            
 
             return (errors, pageModel);
         }

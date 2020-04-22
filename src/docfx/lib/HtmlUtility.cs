@@ -361,6 +361,34 @@ namespace Microsoft.Docs.Build
             return html;
         }
 
+        internal static List<Error> ScanDirtyNode(this HtmlNode html)
+        {
+            var errors = new List<Error>();
+
+            foreach (var node in html.DescendantsAndSelf())
+            {
+                if (node.Name.Equals("script", StringComparison.OrdinalIgnoreCase) ||
+                    node.Name.Equals("link", StringComparison.OrdinalIgnoreCase) ||
+                    node.Name.Equals("style", StringComparison.OrdinalIgnoreCase))
+                {
+                    errors.Add(new Error(ErrorLevel.Warning, "html-embed", "html contain script tag"));
+                }
+                else
+                {
+                    if (node.Name != "th" && node.Name != "td" && node.Attributes.Contains("style"))
+                    {
+                        var value = node.Attributes["style"].Value ?? "";
+                        if (!s_allowedStyles.Any(l => l == value))
+                        {
+                            node.Attributes.Remove("style");
+                        }
+                    }
+                }
+            }
+
+            return errors;
+        }
+
         private static void AddLinkType(this HtmlNode html, string tag, string attribute, string locale)
         {
             foreach (var node in html.Descendants(tag))

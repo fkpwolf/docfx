@@ -714,3 +714,13 @@ outputs:
     ["suggestion","path-duplication","Article URL '/docs/folder/duplicatedword/folder1/duplicatedword' contains duplicated text 'duplicatedword'. For SEO, article URLs should not contain duplication.", "v2/duplicatedword/folder1/DuplicatedWord.md"]
     ["suggestion","path-duplication","Article URL '/docs/folder/duplicated-base-path/docs/a' contains duplicated text 'docs'. For SEO, article URLs should not contain duplication.", "folder0/duplicated-base-path/docs/a.md"]
 ---
+# Validate embed html
+inputs:
+  docfx.yml:
+  a.md: |
+    <script>alert(0);</script>
+outputs:
+  a.json:
+  .errors.log: |
+    ["warning","html-embed","html contain script tag","a.md"]
+---
