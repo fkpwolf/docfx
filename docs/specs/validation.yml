@@ -719,8 +719,10 @@ inputs:
   docfx.yml:
   a.md: |
     <script>alert(0);</script>
+    <div onclick="alert();"></div>
 outputs:
   a.json:
   .errors.log: |
-    ["warning","html-embed","html contain script tag","a.md"]
+    ["warning","disallowed-html","HTML attribute 'onclick' isn't allowed. Disallowed HTML poses a security risk and must be replaced with approved Docs Markdown syntax.","a.md"]
+    ["warning","disallowed-html","HTML tag 'script' isn't allowed. Disallowed HTML poses a security risk and must be replaced with approved Docs Markdown syntax.","a.md"]
 ---

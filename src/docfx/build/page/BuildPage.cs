@@ -224,7 +224,7 @@ namespace Microsoft.Docs.Build
             errors.AddRange(markupErrors);
 
             var rawHtmlDom = HtmlUtility.LoadHtml(html);
-            var htmlErrors = HtmlUtility.ScanDirtyNode(rawHtmlDom);
+            var htmlErrors = HtmlUtility.ScanDirtyNode(rawHtmlDom, file);
             errors.AddRange(htmlErrors);
 
             var htmlDom = rawHtmlDom.PostMarkup(context.Config.DryRun);

@@ -17,6 +17,25 @@ namespace Microsoft.Docs.Build
     {
         private static readonly string[] s_allowedStyles = new[] { "text-align: right;", "text-align: left;", "text-align: center;" };
 
+        private static readonly HashSet<string> s_disallowedTags = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "script", "link", "style",
+        };
+
+        private static readonly HashSet<string> s_allowedAttributes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes
+            "class", "dir", "hidden", "id", "itemid", "itemprop", "itemref", "itemscope", "itemtype,",
+            "lang", "part", "slot", "spellcheck", "tabindex", "title", "cite", "value", "reversed",
+            "start", "download", "href", "hreflang", "ping", "rel", "target", "type", "datetime",
+            "alt", "decoding", "height", "intrinsicsize", "loading", "sizes", "src", "width",
+            "abbr", "colspan", "headers", "rowspan", "scope", "allow", "allowfullscreen", "allowpaymentrequest",
+            "name", "referrerpolicy", "sandbox", "srcdoc", "role",
+
+            // docs specific attributes
+            "highlight-lines",
+        };
+
         public static HtmlNode LoadHtml(string html)
         {
             var doc = new HtmlDocument();
@@ -361,27 +380,34 @@ namespace Microsoft.Docs.Build
             return html;
         }
 
-        internal static List<Error> ScanDirtyNode(this HtmlNode html)
+        internal static List<Error> ScanDirtyNode(this HtmlNode html, Document file)
         {
             var errors = new List<Error>();
 
             foreach (var node in html.DescendantsAndSelf())
             {
-                if (node.Name.Equals("script", StringComparison.OrdinalIgnoreCase) ||
-                    node.Name.Equals("link", StringComparison.OrdinalIgnoreCase) ||
-                    node.Name.Equals("style", StringComparison.OrdinalIgnoreCase))
+                if (node.NodeType != HtmlNodeType.Element)
                 {
-                    errors.Add(new Error(ErrorLevel.Warning, "html-embed", "html contain script tag"));
+                    continue;
                 }
-                else
+
+                if (s_disallowedTags.Contains(node.Name))
                 {
-                    if (node.Name != "th" && node.Name != "td" && node.Attributes.Contains("style"))
+                    var errorMessage = $"HTML tag '{node.Name}' isn't allowed. Disallowed HTML poses a security risk and must be replaced with approved Docs Markdown syntax.";
+                    errors.Add(new Error(ErrorLevel.Warning, "disallowed-html", errorMessage, file.FilePath));
+                }
+
+                foreach (var attribute in node.Attributes)
+                {
+                    if (attribute.Name.StartsWith("data-", StringComparison.OrdinalIgnoreCase) ||
+                            attribute.Name.StartsWith("aria-", StringComparison.OrdinalIgnoreCase))
                     {
-                        var value = node.Attributes["style"].Value ?? "";
-                        if (!s_allowedStyles.Any(l => l == value))
-                        {
-                            node.Attributes.Remove("style");
-                        }
+                        continue;
+                    }
+                    else if (!s_allowedAttributes.Contains(attribute.Name))
+                    {
+                        var errorMessage = $"HTML attribute '{attribute.Name}' isn't allowed. Disallowed HTML poses a security risk and must be replaced with approved Docs Markdown syntax.";
+                        errors.Add(new Error(ErrorLevel.Warning, "disallowed-html", errorMessage, file.FilePath));
                     }
                 }
             }
