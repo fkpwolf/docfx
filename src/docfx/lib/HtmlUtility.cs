@@ -396,18 +396,20 @@ namespace Microsoft.Docs.Build
                     var errorMessage = $"HTML tag '{node.Name}' isn't allowed. Disallowed HTML poses a security risk and must be replaced with approved Docs Markdown syntax.";
                     errors.Add(new Error(ErrorLevel.Warning, "disallowed-html", errorMessage, file.FilePath));
                 }
-
-                foreach (var attribute in node.Attributes)
+                else
                 {
-                    if (attribute.Name.StartsWith("data-", StringComparison.OrdinalIgnoreCase) ||
-                            attribute.Name.StartsWith("aria-", StringComparison.OrdinalIgnoreCase))
+                    foreach (var attribute in node.Attributes)
                     {
-                        continue;
-                    }
-                    else if (!s_allowedAttributes.Contains(attribute.Name))
-                    {
-                        var errorMessage = $"HTML attribute '{attribute.Name}' isn't allowed. Disallowed HTML poses a security risk and must be replaced with approved Docs Markdown syntax.";
-                        errors.Add(new Error(ErrorLevel.Warning, "disallowed-html", errorMessage, file.FilePath));
+                        if (attribute.Name.StartsWith("data-", StringComparison.OrdinalIgnoreCase) ||
+                                attribute.Name.StartsWith("aria-", StringComparison.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+                        else if (!s_allowedAttributes.Contains(attribute.Name))
+                        {
+                            var errorMessage = $"HTML attribute '{attribute.Name}' on tag '{node.Name}' isn't allowed. Disallowed HTML poses a security risk and must be replaced with approved Docs Markdown syntax.";
+                            errors.Add(new Error(ErrorLevel.Warning, "disallowed-html", errorMessage, file.FilePath));
+                        }
                     }
                 }
             }

@@ -252,8 +252,6 @@ namespace Microsoft.Docs.Build
                 Title = userMetadata.Title ?? title,
             });
 
-            
-
             return (errors, pageModel);
         }
 

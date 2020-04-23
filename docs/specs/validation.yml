@@ -723,6 +723,6 @@ inputs:
 outputs:
   a.json:
   .errors.log: |
-    ["warning","disallowed-html","HTML attribute 'onclick' isn't allowed. Disallowed HTML poses a security risk and must be replaced with approved Docs Markdown syntax.","a.md"]
+    ["warning","disallowed-html","HTML attribute 'onclick' on tag 'div' isn't allowed. Disallowed HTML poses a security risk and must be replaced with approved Docs Markdown syntax.","a.md"]
     ["warning","disallowed-html","HTML tag 'script' isn't allowed. Disallowed HTML poses a security risk and must be replaced with approved Docs Markdown syntax.","a.md"]
 ---
