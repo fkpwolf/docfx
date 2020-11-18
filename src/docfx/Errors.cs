@@ -269,7 +269,7 @@ namespace Microsoft.Docs.Build
             /// </summary>
             /// Behavior: ✔️ Message: ✔️
             public static Error FileNotFound(SourceInfo<string> source)
-                => new Error(ErrorLevel.Warning, "file-not-found", $"Invalid file link: '{source}'.", source);
+                => new Error(ErrorLevel.Warning, "file-not-found", $"Invalid File Link: '{source}'.", source);
         }
 
         public static class UrlPath
