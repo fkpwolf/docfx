@@ -40,9 +40,6 @@ namespace Microsoft.Docs.Build
             public static Error GitHubApiFailed(string message)
                 => new Error(ErrorLevel.Warning, "github-api-failed", $"Call to GitHub API failed '{message}'. Try closing and reopening the PR. If you get this Error again, file an issue.");
 
-            public static Error GitHubApiFailedAgain(string message)
-                => new Error(ErrorLevel.Warning, "github-api-failed-again", $"Call to GitHub API failed '{message}'. Try closing and reopening the PR. If you get this Error again, file an issue.");
-
             /// <summary>
             /// Failed to download any file defined with url.
             /// Examples:
@@ -272,7 +269,7 @@ namespace Microsoft.Docs.Build
             /// </summary>
             /// Behavior: ✔️ Message: ✔️
             public static Error FileNotFound(SourceInfo<string> source)
-                => new Error(ErrorLevel.Warning, "file-not-found", $"Invalid File Link: '{source}'.", source);
+                => new Error(ErrorLevel.Warning, "file-not-found", $"Invalid file link: '{source}'.", source);
         }
 
         public static class UrlPath
