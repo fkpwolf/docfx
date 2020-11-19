@@ -60,6 +60,9 @@ namespace Microsoft.Docs.Build
             public static Error GitCloneFailed(string url, string branch)
                 => new Error(ErrorLevel.Error, "git-clone-failed", $"Failure to clone the repository `{url}#{branch}`. This could be caused by an incorrect repository URL, please verify the URL on the Docs Portal (https://ops.microsoft.com). This could also be caused by not having the proper permission the repository, please confirm that the GitHub group/team that triggered the build has access to the repository.");
 
+                        public static Error GitCloneFailedAgain(string url, string branch)
+                => new Error(ErrorLevel.Error, "git-clone-failed-again", $"Failure to clone the repository `{url}#{branch}`. This could be caused by an incorrect repository URL, please verify the URL on the Docs Portal (https://ops.microsoft.com). This could also be caused by not having the proper permission the repository, please confirm that the GitHub group/team that triggered the build has access to the repository.");
+
             /// <summary>
             /// Failed to compute specific info of a commit.
             /// </summary>
