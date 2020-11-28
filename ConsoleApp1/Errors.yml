@@ -1,0 +1,25 @@
+System:
+  validation-incomplete:
+    level: ErrorLevel.Warning
+    message: Failed to get the validation ruleset and validation was not completed. This happens when there's an issue with the service and continuing to retry the call could cause build delays. You might have content issues that were not reported. To retry validation, close and re-open your PR, or rebuild your branch via Docs Portal (requires admin permissions). If you need admin help or if you continue to see this message, file an issue via https://SiteHelp.
+    comment: >2
+       <summary>
+                  /// Build an OPS repo when the validation service goes down.
+                  /// </summary>
+
+  need-restore:
+    level: ErrorLevel.Error
+    message: Cannot find dependency '{dependencyRepoHref}', did you forget to run `docfx restore`?
+    comment: >2
+       <summary>
+                  /// Build an OPS repo when the validation service goes down.
+                  /// </summary>
+
+Link:
+  news-restore:
+    level: ErrorLevel.Error
+    message: Cannot find dependency '{dependencyRepoHref}', did you forget to run `docfx restore`?
+    comment: >2
+       <summary>
+                  /// Build an OPS repo when the validation service goes down.
+                  /// </summary>

@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace Microsoft.Docs.Tools
 {
@@ -14,28 +18,37 @@ namespace Microsoft.Docs.Tools
             // begin creating the source we'll inject into the users compilation
             var sourceBuilder = new StringBuilder(@"
                 using System;
-                namespace HelloWorldGenerated
+                namespace Microsoft.Docs.Build
                 {
-                    public static class HelloWorld
+                    public static class Errors
                     {
-                        public static void SayHello() 
-                        {
-                            Console.WriteLine(""Hello from generated code!"");
-                            Console.WriteLine(""The following syntax trees existed in the compilation that created this program:"");
-                ");
+            ");
 
-            // using the context, get a list of syntax trees in the users compilation
-            var syntaxTrees = context.Compilation.SyntaxTrees;
+            var deserializer = new DeserializerBuilder()
+                        .WithNamingConvention(UnderscoredNamingConvention.Instance) // see height_in_inches in sample yml 
+                        .Build();
 
-            // add the filepath of each tree to the class we're building
-            foreach (SyntaxTree tree in syntaxTrees)
+            foreach (AdditionalText file in context.AdditionalFiles)
             {
-                sourceBuilder.AppendLine($@"Console.WriteLine(@"" - {tree.FilePath}"");");
+                if (Path.GetExtension(file.Path).Equals(".yml", StringComparison.OrdinalIgnoreCase))
+                {
+                    var p = deserializer.Deserialize<Dictionary<string, Dictionary<string, Error>>>(File.ReadAllText(file.Path));
+                    foreach (var error in p)
+                    {
+                        sourceBuilder.AppendLine($@"public static class {error.Key} {{");
+                        foreach (var e in error.Value)
+                        {
+                            var methodName = string.Join("", e.Key.Split('-').Select(e => e.First().ToString().ToUpper() + e.Substring(1)));
+                            sourceBuilder.AppendLine($@"///{e.Value.Comment}");
+                            sourceBuilder.AppendLine($@"public static Error {methodName} ()");
+                            sourceBuilder.AppendLine($@"=> new Error(""{e.Value.Level}"", ""{e.Key}"", ""{e.Value.Message}"");");
+                        }
+                        sourceBuilder.AppendLine($@"}}");
+                    }
+                }
             }
 
-            // finish creating the source to inject
             sourceBuilder.Append(@"
-                    }
                 }
             }");
 
@@ -46,6 +59,15 @@ namespace Microsoft.Docs.Tools
         public void Initialize(GeneratorInitializationContext context)
         {
             // No initialization required for this one
+        }
+
+        private class Error
+        {
+            public string Level { get; set; } = string.Empty;
+
+            public string Message { get; set; } = string.Empty;
+
+            public string Comment { get; set; } = string.Empty;
         }
     }
 }

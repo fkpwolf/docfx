@@ -5,8 +5,9 @@
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
-
   <ItemGroup>
     <ProjectReference Include="../Tool/Tool.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <AdditionalFiles Include="Errors.yml" />
   </ItemGroup>
+
 </Project>
