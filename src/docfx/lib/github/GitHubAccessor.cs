@@ -199,7 +199,7 @@ namespace Microsoft.Docs.Build
                 if (response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden)
                 {
                     Log.Write(await response.Content.ReadAsStringAsync());
-                    _fatalError = Errors.System.GitHubApiFailed(response.StatusCode.ToString());
+                    _fatalError = Errors.System.GithubApiFailed(response.StatusCode.ToString());
                     return (_fatalError, default, default);
                 }
 
@@ -217,11 +217,11 @@ namespace Microsoft.Docs.Build
                         {
                             case "MAX_NODE_LIMIT_EXCEEDED":
                             case "RATE_LIMITED":
-                                _fatalError = Errors.System.GitHubApiFailed($"[{error.type}] {error.message}");
+                                _fatalError = Errors.System.GithubApiFailed($"[{error.type}] {error.message}");
                                 return (_fatalError, default, default);
 
                             default:
-                                return (Errors.System.GitHubApiFailed($"[{error.type}] {error.message}"), error.type, default);
+                                return (Errors.System.GithubApiFailed($"[{error.type}] {error.message}"), error.type, default);
                         }
                     }
                 }
@@ -231,7 +231,7 @@ namespace Microsoft.Docs.Build
             catch (Exception ex)
             {
                 Log.Write(ex);
-                return (Errors.System.GitHubApiFailed(ex.Message), default, default);
+                return (Errors.System.GithubApiFailed(ex.Message), default, default);
             }
         }
 

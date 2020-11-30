@@ -9,8 +9,17 @@ namespace Microsoft.Docs.Build
 {
     public class Error
     {
-        public Error(string level, string code, string message)
+        public Error(ErrorLevel level, string code, string message)
         {
         }
+    }
+
+    public enum ErrorLevel
+    {
+        Off,
+        Info,
+        Suggestion,
+        Warning,
+        Error,
     }
 }

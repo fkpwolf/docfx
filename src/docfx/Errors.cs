@@ -9,81 +9,8 @@ using System.Linq;
 namespace Microsoft.Docs.Build
 {
     [SuppressMessage("Layout", "MEN002", Justification = "Suppress MEN002 for Errors.cs")]
-    internal static class Errors
+    internal static partial class Errors
     {
-        public static class System
-        {
-            /// <summary>
-            /// Build an OPS repo when the validation service goes down.
-            /// </summary>
-            /// Behavior: ✔️ Message: ✔️
-            public static Error ValidationIncomplete()
-                => new Error(ErrorLevel.Warning, "validation-incomplete", $"Failed to get the validation ruleset and validation was not completed. This happens when there's an issue with the service and continuing to retry the call could cause build delays. You might have content issues that were not reported. To retry validation, close and re-open your PR, or rebuild your branch via Docs Portal (requires admin permissions). If you need admin help or if you continue to see this message, file an issue via https://SiteHelp.");
-
-            /// <summary>
-            /// Didn't run `docfx restore` before running `docfx build`.
-            /// Examples:
-            /// - can't find a cache(build required) file defined with url in config file
-            /// - can't find dependent repo in file system
-            /// </summary>
-            /// Behavior: ❌ Message: ❌
-            public static Error NeedRestore(string dependencyRepoHref)
-                => new Error(ErrorLevel.Error, "need-restore", $"Cannot find dependency '{dependencyRepoHref}', did you forget to run `docfx restore`?");
-
-            /// <summary>
-            /// Failed to call a github api, e.g. GET /users/login.
-            /// Examples:
-            ///   - the api call reach github limit
-            ///   - using invalid access token(more detailed info in ex.Message)
-            /// </summary>
-            /// Behavior: ✔️ Message: ✔️
-            public static Error GitHubApiFailed(string message)
-                => new Error(ErrorLevel.Warning, "github-api-failed", $"Call to GitHub API failed '{message}'. Try closing and reopening the PR. If you get this Error again, file an issue.");
-
-            /// <summary>
-            /// Failed to download any file defined with url.
-            /// Examples:
-            ///   - failed to download for bad url
-            ///   - failed to download due to bad network
-            ///   - when update user profile cache fails, need to download verify etag
-            /// </summary>
-            /// Behavior: ✔️ Message: ✔️
-            public static Error DownloadFailed(string url)
-                => new Error(ErrorLevel.Error, "download-failed", $"Download failed for file '{url}'. Try closing and reopening the PR. If you get this Error again, file an issue.");
-
-            /// <summary>
-            /// Failed to run `git fetch` or `git worktree add`.
-            /// Examples:
-            ///   - restore a repo with bad url
-            /// </summary>
-            /// Behavior: ✔️ Message: ✔️
-            public static Error GitCloneFailed(string url, string branch)
-                => new Error(ErrorLevel.Error, "git-clone-failed", $"Failure to clone the repository `{url}#{branch}`. This could be caused by an incorrect repository URL, please verify the URL on the Docs Portal (https://ops.microsoft.com). This could also be caused by not having the proper permission the repository, please confirm that the GitHub group/team that triggered the build has access to the repository.");
-
-            /// <summary>
-            /// Failed to compute specific info of a commit.
-            /// </summary>
-            public static Error GitCloneIncomplete(string repoPath)
-                => new Error(ErrorLevel.Warning, "git-clone-incomplete", $"Git repository '{repoPath}' is an incomplete clone, GitHub contributor list may not be accurate.");
-
-            /// <summary>
-            /// Git.exe isn't installed.
-            /// </summary>
-            /// Behavior: ❌ Message: ✔️
-            public static Error GitNotFound()
-                => new Error(ErrorLevel.Error, "git-not-found", $"Git isn't installed on the target machine. Try closing and reopening the PR. If you get this Error again, file an issue.");
-
-            /// <summary>
-            /// Call Microsoft Graph API failed
-            /// </summary>
-            /// Behavior: ✔️ Message: ❌
-            public static Error MicrosoftGraphApiFailed(string exMessage)
-                => new Error(ErrorLevel.Warning, "microsoft-graph-api-failed", $"Call to Microsoft Graph API failed: {exMessage} Try closing and reopening the PR. If you get this Error again, file an issue.");
-
-            public static Error MetadataValidationRuleset(string ruleset)
-                => new Error(ErrorLevel.Info, "MetadataValidationRuleset", $"Metadata validation ruleset used: {ruleset}.");
-        }
-
         public static class Logging
         {
             /// <summary>
