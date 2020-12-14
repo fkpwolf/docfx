@@ -10,7 +10,8 @@ namespace Microsoft.Docs.Build
         public static void Main()
         {
             Console.WriteLine("Hello World!");
-            var e1 = Errors.System.NeedRestore("hh");
+
+            var err = Errors.System.ValidationIncomplete2();
         }
     }
 }
