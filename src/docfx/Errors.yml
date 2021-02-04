@@ -1,0 +1,845 @@
+System:
+  validation-incomplete:
+    level: ErrorLevel.Warning
+    message: Failed to get the validation ruleset and validation was not completed. This happens when there's an issue with the service and continuing to retry the call could cause build delays. You might have content issues that were not reported. To retry validation, close and re-open your PR, or rebuild your branch via Docs Portal (requires admin permissions). If you need admin help or if you continue to see this message, file an issue via https://SiteHelp.
+    comment: >2
+       <summary>
+                  /// Build an OPS repo when the validation service goes down.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  need-restore:
+    level: ErrorLevel.Error
+    message: Cannot find dependency '{dependencyRepoHref}', did you forget to run `docfx restore`?
+    comment: >2
+       <summary>
+                  /// Didn't run `docfx restore` before running `docfx build`.
+                  /// Examples:
+                  /// - can't find a cache(build required) file defined with url in config file
+                  /// - can't find dependent repo in file system
+                  /// </summary>
+                  /// Behavior: ❌ Message: ❌
+  github-api-failed:
+    level: ErrorLevel.Warning
+    message: Call to GitHub API failed '{message}'. Try closing and reopening the PR. If you get this Error again, file an issue.
+    comment: >2
+       <summary>
+                  /// Failed to call a github api, e.g. GET /users/login.
+                  /// Examples:
+                  ///   - the api call reach github limit
+                  ///   - using invalid access token(more detailed info in ex.Message)
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  download-failed:
+    level: ErrorLevel.Error
+    message: Download failed for file '{url}'. Try closing and reopening the PR. If you get this Error again, file an issue.
+    comment: >2
+       <summary>
+                  /// Failed to download any file defined with url.
+                  /// Examples:
+                  ///   - failed to download for bad url
+                  ///   - failed to download due to bad network
+                  ///   - when update user profile cache fails, need to download verify etag
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  git-clone-failed:
+    level: ErrorLevel.Error
+    message: Failure to clone the repository `{url}#{branch}`. This could be caused by an incorrect repository URL, please verify the URL on the Docs Portal (https://ops.microsoft.com). This could also be caused by not having the proper permission the repository, please confirm that the GitHub group/team that triggered the build has access to the repository.
+    comment: >2
+       <summary>
+                  /// Failed to run `git fetch` or `git worktree add`.
+                  /// Examples:
+                  ///   - restore a repo with bad url
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  git-clone-incomplete:
+    level: ErrorLevel.Warning
+    message: Git repository '{repoPath}' is an incomplete clone, GitHub contributor list may not be accurate.
+    comment: >2
+       <summary>
+                  /// Failed to compute specific info of a commit.
+                  /// </summary>
+  git-not-found:
+    level: ErrorLevel.Error
+    message: Git isn't installed on the target machine. Try closing and reopening the PR. If you get this Error again, file an issue.
+    comment: >2
+       <summary>
+                  /// Git.exe isn't installed.
+                  /// </summary>
+                  /// Behavior: ❌ Message: ✔️
+  microsoft-graph-api-failed:
+    level: ErrorLevel.Warning
+    message: 'Call to Microsoft Graph API failed: {exMessage} Try closing and reopening the PR. If you get this Error again, file an issue.'
+    comment: >2
+       <summary>
+                  /// Call Microsoft Graph API failed
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  MetadataValidationRuleset:
+    level: ErrorLevel.Info
+    message: 'Metadata validation ruleset used: {ruleset}.'
+    comment: ''
+Logging:
+  exceed-max-file-errors:
+    level: ErrorLevel.Info
+    message: "{level} count exceed '{maxErrors}'. Build will continue but newer logs in '{file}' will be ignored."
+    comment: >2
+       <summary>
+                  /// Build errors is larger than <see cref="OutputConfig.MaxFileErrors"/>.
+                  /// </summary>
+                  /// Behavior: ❌ Message: ❌
+  fallback-error:
+    level: ErrorLevel.Error
+    message: Error(s) from '{defaultLocale}' repository caused this build failure, please check '{defaultLocale}' build report.
+    comment: >2
+       <summary>
+                  /// Build failure caused by English content when building localized docset.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  rule-override-invalid:
+    level: ErrorLevel.Warning
+    message: Validation rule '{code}' is not overridable, so overrides in docfx.yml/docfx.json will be ignored.
+    comment: >2
+       <summary>
+                  /// Validation rule is not overridable in docfx config.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+Json:
+  json-syntax-error:
+    level: ErrorLevel.Error
+    message: '{message}'
+    comment: >2
+       <summary>
+                  /// Syntax error in json file.
+                  /// Examples:
+                  ///   - unclosed ([{
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  null-array-value:
+    level: ErrorLevel.Warning
+    message: "'{name}' contains null value, the null value has been removed."
+    comment: ''
+  violate-schema:
+    level: ErrorLevel.Error
+    message: '{message}'
+    comment: >2
+       <summary>
+                  /// Schema document with violate content type/value against predefined models(not syntax error).
+                  /// </summary>
+                  /// Behavior: ❌ Message: ❌
+Yaml:
+  yaml-syntax-error:
+    level: ErrorLevel.Error
+    message: '{message}'
+    comment: >2
+       <summary>
+                  /// Syntax error in yaml file(not duplicate key).
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  yaml-header-syntax-error:
+    level: ErrorLevel.Warning
+    message: '{error.Message}'
+    comment: >2
+       <summary>
+                  /// Syntax error in yaml header(not duplicate key).
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  yaml-duplicate-key:
+    level: ErrorLevel.Warning
+    message: Key '{key}' is already defined, remove the duplicate key.
+    comment: >2
+       <summary>
+                  /// Used duplicate yaml key in markdown yml header or schema document(yml).
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  schema-not-found:
+    level: ErrorLevel.Error
+    message: Unknown schema '{source}'.
+    comment: >2
+       <summary>
+                  /// Used unknown YamlMime.
+                  /// Examples:
+                  ///   - forgot to define schema in schema document(yml)
+                  ///   - defined a an unknown schema type(other than conceptual, contextObject, landingData)
+                  /// </summary>
+                  /// Behavior: ❌ Message: ✔️
+Config:
+  config-not-found:
+    level: ErrorLevel.Error
+    message: Can't find docfx config file in '{docsetPath}'.
+    comment: >2
+       <summary>
+                  /// Docfx.yml/docfx.json doesn't exist at the repo root.
+                  /// Examples:
+                  ///   - non-loc build, docfx.yml/docfx.json doesn't exist at the repo root
+                  ///   - loc build, docfx.yml/docfx.json doesn't exist at the neither loc repo root
+                  ///     nor source repo root
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  docset-not-provisioned:
+    level: ErrorLevel.Error
+    message: Cannot build docset '{name}' because it isn't provisioned. Please go to Docs Portal (https://ops.microsoft.com) to provision first.
+    comment: >2
+       <summary>
+                  /// Build an OPS repo with a docset name that isn't provisioned.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  glob-pattern-invalid:
+    level: ErrorLevel.Error
+    message: "Glob pattern '{pattern}' is invalid: {ex.Message}."
+    comment: >2
+       <summary>
+                  /// Used invalid glob pattern in configuration.
+                  /// Examples:
+                  ///   - in build scope include/exclude files
+                  ///   - in file metadata glob
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  locale-invalid:
+    level: ErrorLevel.Error
+    message: "Invalid locale: '{locale}'."
+    comment: >2
+       <summary>
+                  /// Used invalid locale name(can't be resolved by <see cref="System.Globalization.CultureInfo"/>).
+                  /// </summary>
+  directory-not-found:
+    level: ErrorLevel.Error
+    message: "Invalid directory: '{directory}'."
+    comment: >2
+       <summary>
+                  /// Can't find a folder.
+                  /// Examples: pointing template to a local folder that does not exist
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  committish-not-found:
+    level: ErrorLevel.Error
+    message: Can't find branch, tag, or commit '{committish}' for repo {repo}.
+    comment: >2
+       <summary>
+                  /// Failed to invoke `git revparse`(resolve commit history of a file on a non-existent branch).
+                  /// Examples:
+                  ///   - resolve contributors or authors on a locale-sxs branch while the corresponding locale branch doesn't exist
+                  /// </summary>
+                  /// Behavior: ❌ Message: ✔️
+Link:
+  link-out-of-scope:
+    level: ErrorLevel.Warning
+    message: File '{file}' referenced by link '{source}' will not be built because it is not included in build scope.
+    comment: >2
+       <summary>
+                  /// Link which is resolved to a file out of build scope.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  local-file-path:
+    level: ErrorLevel.Warning
+    message: Link '{path}' points to a local file. Use a relative path instead.
+    comment: >2
+       <summary>
+                  /// Used a link pointing to an rooted absolute file path.
+                  /// Examples:
+                  ///   - [Absolute](C:/a.md)
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  circular-reference:
+    level: ErrorLevel.Error
+    message: 'Build has identified file(s) referencing each other: {dependencyChain}.'
+    comment: >2
+       <summary>
+                  /// Two files include each other.
+                  /// Examples:
+                  ///   - a.md includes b.md and reversely
+                  ///   - toc1 references toc2 and reversely
+                  ///   - toc references itself
+                  ///   - a.md references b.json's property with xref syntax, and b.json includes a.md reversely
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  file-not-found:
+    level: ErrorLevel.Warning
+    message: "Invalid file link: '{source}'."
+    comment: >2
+       <summary>
+                  /// Can't find a file referenced by configuration, or user writes a non-existing link.
+                  /// Examples:
+                  ///   - define user_profile.json file in config, while the file doesn't exist
+                  ///   - href referencing a non-existing file
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+UrlPath:
+  publish-url-conflict:
+    level: ErrorLevel.Warning
+    message: "Two or more files{message} publish to the same url '{url}': {StringUtility.Join(files.Select(file => $\"{file.Key}{(conflictMonikers.Count == 0 ? null : $\"<{StringUtility.Join(file.Value)}>\")}\"))}."
+    comment: >2
+       <summary>
+                  /// Files published to the same url have no monikers or share common monikers.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  output-path-conflict:
+    level: ErrorLevel.Warning
+    message: "Two or more files output to the same path '{path}': {StringUtility.Join(files)}."
+    comment: >2
+       <summary>
+                  /// More than one files are resolved to the same output path.
+                  /// Examples:
+                  ///   - in <see cref="Config.Redirections"/> section, defined an entry key that's also a file in build scope
+                  ///   - different file extension with same filename, like `Toc.yml` and `Toc.md`
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+Redirection:
+  redirection-conflict:
+    level: ErrorLevel.Error
+    message: The '{path}' appears twice or more in the redirection mappings.
+    comment: >2
+       <summary>
+                  /// Defined same redirection entry in both <see cref="Config.Redirections"/> and <see cref="Config.RedirectionsWithoutId"/>.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  redirection-invalid:
+    level: ErrorLevel.Error
+    message: File '{path}' is redirected to '{source}'. Only content files can be redirected.
+    comment: >2
+       <summary>
+                  /// Redirection entry isn't a conceptual article(*.{md,json,yml}).
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  redirection-url-conflict:
+    level: ErrorLevel.Warning
+    message: The '{source}' appears twice or more in the redirection mappings.
+    comment: >2
+       <summary>
+                  /// Multiple files defined in <see cref="Config.Redirections"/> are redirected to the same url,
+                  /// can't decide which entry to use when computing document id.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  redirect-url-invalid:
+    level: ErrorLevel.Suggestion
+    message: Can't redirect document ID for redirected file '{from}' because redirect URL '{source}' is invalid or is in a different docset. Specify a redirect_url in the same docset, or set redirect_document_id to false in .openpublishing.redirection.json.
+    comment: >2
+       <summary>
+                  /// The dest to redirection url does not match any files's publish URL, but the redirect_with_id flag has been set as true
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  circular-redirection:
+    level: ErrorLevel.Warning
+    message: 'Build has identified circular redirection: {string.Join(" --> ", redirectionChain)}.'
+    comment: ''
+  redirected-file-not-removed:
+    level: ErrorLevel.Warning
+    message: Redirected file '{path}' is still in the repo. After adding a file to the redirection JSON file, you must delete the original file from the repo.
+    comment: >2
+       <summary>
+                  /// The redirected file is not removed from the source repo.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  redirection-file-not-found:
+    level: ErrorLevel.Error
+    message: Redirection file '{path}' registered in .openpublishing.publish.json is not found in the repo.
+    comment: >2
+       <summary>
+                  /// A redirection file registered in .openpublishing.publish.json is not found in the repo.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  source-path-conflict:
+    level: ErrorLevel.Error
+    message: A redirection item cannot contain 'source_path' and 'source_path_from_root' at the same time.
+    comment: >2
+       <summary>
+                  /// A redirection item cannot contain ‘source_path’ and ‘source_path_from_root’ at the same time.
+                  /// </summary>
+                  /// /// Behavior: ✔️ Message: ✔️
+  redirection-path-syntax-error:
+    level: ErrorLevel.Warning
+    message: Redirection path syntax is incorrect. 'source_path' should start without '/' and 'source_path_from_root' should start with '/'.
+    comment: >2
+       <summary>
+                  /// Check redirection source path syntax.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+Toc:
+  invalid-topic-href:
+    level: ErrorLevel.Error
+    message: The topic href '{source}' can only reference to a local file or absolute path.
+    comment: >2
+       <summary>
+                  /// In yaml-format toc, topicHref SHOULD reference an article,
+                  /// rather than relative path or another toc file.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  invalid-toc-href:
+    level: ErrorLevel.Error
+    message: The toc href '{source}' can only reference to a local TOC file, folder or absolute path.
+    comment: >2
+       <summary>
+                  /// In markdown-format toc, link(treated as inclusion) CAN ONLY be toc file, folder or absolute path.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  toc-not-found:
+    level: ErrorLevel.Warning
+    message: Unable to find either toc.yml or toc.md inside {source} Please make sure the file exists.
+    comment: >2
+       <summary>
+                  /// Toc inclusion with relative folder, no toc.{md,yml} file in corresponding folder.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  invalid-toc-syntax:
+    level: ErrorLevel.Error
+    message: The toc syntax is invalid, each line must be a valid markdown [ATX heading](https://spec.commonmark.org/0.28/#atx-heading) with a single link, xref link or literal text.
+    comment: >2
+       <summary>
+                  /// In markdown-format toc, used wrong toc syntax.
+                  /// Examples:
+                  ///   - The toc syntax '[bad1]()\n#[bad2](test.md)' is invalid,
+                  ///     the opening sequence of, characters must be followed by a space or by the end of line
+                  ///   - The toc syntax '# @b abc' is invalid, multiple inlines in one heading block is not allowed
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  invalid-toc-level:
+    level: ErrorLevel.Error
+    message: The toc level can't be skipped from {from} to {to}.
+    comment: >2
+       <summary>
+                  /// In markdown-format toc, header level should be continuous, it shouldn't skip a level.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+Xref:
+  at-xref-not-found:
+    level: ErrorLevel.Off
+    message: "Cross reference not found: '{source}'."
+    comment: >2
+       <summary>
+                  /// Failed to resolve uid defined by @ syntax.
+                  /// </summary>
+                  /// Behavior: ❌ Message: ✔️
+  xref-not-found:
+    level: ErrorLevel.Warning
+    message: "Cross reference not found: '{source}'."
+    comment: >2
+       <summary>
+                  /// Failed to resolve uid defined by [link](xref:uid) or <xref:uid> syntax.
+                  /// </summary>
+                  /// Behavior: ❌ Message: ✔️
+  xref-type-invalid:
+    level: ErrorLevel.Warning
+    message: "Invalid cross reference: '{xref}'. Expected type '{expectedXrefType}' but got '{actualXrefType}'."
+    comment: ''
+  uid-not-found:
+    level: ErrorLevel.Warning
+    message: UID '{uid}' with type '{schemaType}' not found, which is referenced by repository {StringUtility.Join(repositories)}.
+    comment: ''
+  duplicate-uid:
+    level: ErrorLevel.Warning
+    message: UID '{uid}' is duplicated in {StringUtility.Join(conflicts)}.
+    comment: >2
+       <summary>
+                  /// The same uid of the same version is defined in multiple places
+                  /// Examples:
+                  ///   - both files with no monikers defined same uid
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  duplicate-uid-global:
+    level: ErrorLevel.Warning
+    message: UID '{uid}' is duplicated globally in repository '{repositoryUrl}'.
+    comment: >2
+       <summary>
+                  /// The same uid is defined in multiple docsets
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+Versioning:
+  duplicate-moniker-config:
+    level: ErrorLevel.Warning
+    message: Both 'monikers' and 'monikerRange' are defined, 'monikers' is ignored.
+    comment: ''
+  moniker-overlapping:
+    level: ErrorLevel.Error
+    message: 'Two or more documents with the same uid `{uid}`({StringUtility.Join(files)}) have defined overlapping moniker: {StringUtility.Join(overlappingMonikers)}.'
+    comment: >2
+       <summary>
+                  /// Multiple articles with same uid contain overlapped monikers,
+                  /// and can't decide which article to use when referencing that uid with this overlapped version
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  moniker-range-undefined:
+    level: ErrorLevel.Suggestion
+    message: 'Moniker range missing in docfx.yml/docfx.json, user should not define it in file metadata or moniker zone. NOTE: This Suggestion will become a Error on 06/30/2020.'
+    comment: >2
+       <summary>
+                  /// MonikerRange is not defined in docfx.yml or doesn't match an article.md,
+                  /// which used monikerRange in its yaml header or used moniker-zone syntax.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  moniker-zone-empty:
+    level: ErrorLevel.Warning
+    message: No intersection between zone and file level monikers. The result of zone level range string '{source}' is {StringUtility.Join(zoneLevelMonikers)}, while file level monikers is {StringUtility.Join(fileLevelMonikers)}.
+    comment: >2
+       <summary>
+                  /// Moniker-zone defined in article.md has no intersection with file-level monikers.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  moniker-range-out-of-scope:
+    level: ErrorLevel.Error
+    message: No moniker intersection between docfx.yml/docfx.json and file metadata. Config moniker range '{configMonikerRange}' is {StringUtility.Join(configMonikers)}, while file monikers is {StringUtility.Join(fileMonikers)}.
+    comment: >2
+       <summary>
+                  /// Config's monikerRange and monikerRange defined in yaml header has no intersection
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+ZonePivot:
+  zone-pivot-definition-not-found:
+    level: ErrorLevel.Suggestion
+    message: No source file is present for '{publishUrl}'. To use zone pivots, you must first define the zone pivot groups in zone-pivot-groups.yml or specify a file by 'zone_pivot_group_filename' metadata. Cross docset reference to zone pivot groups definition not supported by docfx.
+    comment: ''
+  zone-pivot-definition-conflict:
+    level: ErrorLevel.Suggestion
+    message: Multiple source files are present for '{publishUrl}'.
+    comment: ''
+  pivot-group-not-found:
+    level: ErrorLevel.Suggestion
+    message: Pivot group '{groupId}' isn't defined in '{definitionFile}'. Make sure every pivot group you reference in your content has been properly defined.
+    comment: ''
+  zone-pivot-group-missing:
+    level: ErrorLevel.Suggestion
+    message: 'Missing metadata attribute: zone_pivot_groups. To use zone pivots in your file, you must specify the valid zone pivot group that contains the pivot IDs you want to use.'
+    comment: ''
+Markdown:
+  include-invalid:
+    level: ErrorLevel.Warning
+    message: "Invalid include link extension: '{source}'."
+    comment: ''
+  include-not-found:
+    level: ErrorLevel.Error
+    message: "Invalid include link: '{source}'."
+    comment: ''
+JsonSchema:
+  unknown-field:
+    level: ErrorLevel.Warning
+    message: Could not find member '{propName}' on object of type '{typeName}'.
+    comment: >2
+       <summary>
+                  /// Defined extra field(s) in input model in schema document(json, yml).
+                  /// </summary>
+                  /// Behavior: ❌ Message: ❌
+  unexpected-type:
+    level: ErrorLevel.Warning
+    message: Expected type '{expectedType}' but got '{actualType}'.
+    comment: >2
+       <summary>
+                  /// The input value type does not match expected value type.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  invalid-value:
+    level: ErrorLevel.Warning
+    message: "Invalid value for '{name}': '{value}'."
+    comment: >2
+       <summary>
+                  /// The input value is not defined in a valid value list.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  format-invalid:
+    level: ErrorLevel.Warning
+    message: String '{value}' is not a valid '{type}'.
+    comment: >2
+       <summary>
+                  /// The string type's value doesn't match given format.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  array-length-invalid:
+    level: ErrorLevel.Warning
+    message: Array '{propName}' length should be {criteria}.
+    comment: >2
+       <summary>
+                  /// Array length not within min and max.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  array-min-check-invalid:
+    level: ErrorLevel.Warning
+    message: The array must have least {value} matched item(s).
+    comment: >2
+       <summary>
+                  /// Array conditional check not within min value
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  array-max-check-invalid:
+    level: ErrorLevel.Warning
+    message: The array must not have more than {value} matched item(s).
+    comment: >2
+       <summary>
+                  /// Array conditional check not within max value
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  array-not-unique:
+    level: ErrorLevel.Warning
+    message: Array '{propName}' items should be unique.
+    comment: >2
+       <summary>
+                  /// Array items not unique.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  array-contains-failed:
+    level: ErrorLevel.Warning
+    message: Array '{propName}' should contain at least one item that matches JSON schema.
+    comment: >2
+       <summary>
+                  /// Array items not unique.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  boolean-schema-failed:
+    level: ErrorLevel.Warning
+    message: Boolean schema validation failed for '{propName}'.
+    comment: >2
+       <summary>
+                  /// Error when JSON boolean schema failed.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  property-count-invalid:
+    level: ErrorLevel.Warning
+    message: Object '{propName}' property count should be {criteria}.
+    comment: >2
+       <summary>
+                  /// Object property count not within min and max.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  string-length-invalid:
+    level: ErrorLevel.Warning
+    message: "String '{propName}' is too {type}: {length} characters. Length should be {criteria}."
+    comment: >2
+       <summary>
+                  /// String length not within min and max.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  number-invalid:
+    level: ErrorLevel.Warning
+    message: Number '{value}' should be {criteria}.
+    comment: >2
+       <summary>
+                  /// Number not within min and max.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  one-of-failed:
+    level: ErrorLevel.Warning
+    message: "Invalid value for '{propName}': '{value}'."
+    comment: >2
+       <summary>
+                  /// Data does not match exactly one subschema
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  not-failed:
+    level: ErrorLevel.Warning
+    message: "Invalid value for '{propName}': '{value}'."
+    comment: >2
+       <summary>
+                  /// Data matches subschema
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  missing-attribute:
+    level: ErrorLevel.Warning
+    message: "Missing required attribute: '{name}'."
+    comment: >2
+       <summary>
+                  /// A required attribute is missing.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  missing-paired-attribute:
+    level: ErrorLevel.Warning
+    message: "Missing attribute: '{otherKey}'. If you specify '{name}', you must also specify '{otherKey}'."
+    comment: >2
+       <summary>
+                  /// An attribute lacks the required dependency.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  missing-either-attribute:
+    level: ErrorLevel.Warning
+    message: 'One of the following attributes is required: {StringUtility.Join(attributes)}.'
+    comment: >2
+       <summary>
+                  /// Attributes do not meet the requirements of either logic.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  precluded-attributes:
+    level: ErrorLevel.Warning
+    message: 'Only one of the following attributes can exist: {StringUtility.Join(attributes)}.'
+    comment: >2
+       <summary>
+                  /// Attributes do not meet the requirements of precludes logic.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  date-format-invalid:
+    level: ErrorLevel.Warning
+    message: "Invalid date format for '{name}': '{value}'."
+    comment: >2
+       <summary>
+                  /// An attribute doesn't conform to date format.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  date-out-of-range:
+    level: ErrorLevel.Warning
+    message: "Value out of range for '{name}': '{value}'."
+    comment: >2
+       <summary>
+                  /// Date out of range.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  attribute-deprecated:
+    level: ErrorLevel.Warning
+    message: "Deprecated attribute: '{name}'{(string.IsNullOrEmpty(replacedBy) ? \".\" : $\", use '{replacedBy}' instead.\")}"
+    comment: >2
+       <summary>
+                  /// An attribute is deprecated.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  invalid-paired-attribute:
+    level: ErrorLevel.Warning
+    message: "Invalid value for '{name}': '{value}' is not valid with '{dependentFieldName}' value '{dependentFieldValue}'."
+    comment: >2
+       <summary>
+                  /// The value of paired attribute is invalid.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  ms-alias-invalid:
+    level: ErrorLevel.Warning
+    message: Invalid value for '{name}', '{alias}' is not a valid Microsoft alias.
+    comment: >2
+       <summary>
+                  /// The value is not a valid Microsoft alias
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  duplicate-attribute:
+    level: ErrorLevel.Suggestion
+    message: Attribute '{name}' with value '{value}' is duplicated in {StringUtility.Join(duplicatedSources)}.
+    comment: >2
+       <summary>
+                  /// The attribute value is duplicated within docset
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  min-reference-count-invalid:
+    level: ErrorLevel.Warning
+    message: UID '{source}' reference count should be least {minReferenceCount}, but now is {conflicts.Count()} ({StringUtility.Join(conflicts)}).
+    comment: ''
+  max-reference-count-invalid:
+    level: ErrorLevel.Warning
+    message: UID '{source}' reference count should not be more than {maxReferenceCount}, but now is {conflicts.Count()} ({StringUtility.Join(conflicts)}).
+    comment: ''
+Metadata:
+  author-not-found:
+    level: ErrorLevel.Warning
+    message: "Invalid value for author: '{login}' is not a valid GitHub ID."
+    comment: >2
+       <summary>
+                  /// Failed to get a user from neither user cache nor github api by login.
+                  /// Examples:
+                  ///   - defined a non-existent author
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  attribute-reserved:
+    level: ErrorLevel.Warning
+    message: Attribute {name} is reserved for use by Docs.
+    comment: >2
+       <summary>
+                  /// - Used docfx output model property which are not defined in input model.
+                  /// - Define href property at the same level with uid, href value will be overwritten.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+Content:
+  merge-conflict:
+    level: ErrorLevel.Warning
+    message: File contains merge conflict markers.
+    comment: >2
+       <summary>
+                  /// File contains git merge conflict.
+                  /// Examples:
+                  ///   - <![CDATA[
+                  ///     <<<<<<< HEAD
+                  ///     head content
+                  ///     =======
+                  ///     branch content
+                  ///     >>>>>>> refs/heads/branch
+                  /// ]]>
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  bookmark-not-found:
+    level: ErrorLevel.Warning
+    message: "Cannot find bookmark '#{bookmark}' in '{reference}'{(StringUtility.FindBestMatch(bookmark, candidateBookmarks, out var matchedBookmark) ? $\", did you mean '#{matchedBookmark}'?\" : \".\")}"
+    comment: >2
+       <summary>
+                  /// Defined reference with by #bookmark fragment within articles, which doesn't exist.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ❌
+  custom-404-page:
+    level: ErrorLevel.Warning
+    message: Custom 404 page will be deprecated in future. Please remove the 404.md file to resolve this warning.
+    comment: >2
+       <summary>
+                  /// Custom 404 page is not supported
+                  /// Example:
+                  ///   - user want their 404.md to be built and shown as their 404 page of the website.
+                  /// </summary>
+  disallowed-html:
+    level: ErrorLevel.Info
+    message: HTML tag '{tag}' isn't allowed. Disallowed HTML poses a security risk and must be replaced with approved Docs Markdown syntax.
+    comment: >2
+       <summary>
+                  /// Html Tag value must be in allowed list
+                  /// </summary>
+DependencyRepository:
+  restore-dependent-repository-failed:
+    level: ErrorLevel.Error
+    message: Failed to restore dependent repository `{url}#{branch}`. This could be caused by an incorrect repository URL, please verify the URL on the Docs Portal (https://ops.microsoft.com). If it is not the case, please open a ticket in https://SiteHelp and include URL of the build report.
+    comment: >2
+       <summary>
+                  /// Failed to restore dependent repository
+                  /// Examples:
+                  ///   - System service account is a member of org but is not SSO enabled.
+                  ///   - System service account does not have sufficient permission to restore template repo.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  repository-owner-sso-issue:
+    level: ErrorLevel.Error
+    message: "Owner of {repoUrl} repository does not have access to {dependentRepoUrl}. Please ask the repository owner '{repoOwner}' to re-authorize his/her GitHub account to Docs Build (reference: https://teams.microsoft.com/l/message/19:7ecffca1166a4a3986fed528cf0870ee@thread.skype/1590030602688?tenantId=72f988bf-86f1-41af-91ab-2d7cd011db47&groupId=de9ddba4-2574-4830-87ed-41668c07a1ca&parentMessageId=1590030602688&teamName=Docs%20Support&channelName=General&createdTime=1590030602688)."
+    comment: >2
+       <summary>
+                  /// Repository owner did not re-authorize his/her GitHub account to Docs Build with SSO.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  service-account-permission-insufficient:
+    level: ErrorLevel.Error
+    message: "Docs Build service account cannot access repository '{dependentRepoUrl}'. Please ask repository owner '{repoOwner}' to grant 'write' permission to all service accounts under '{repoOrg}' organization to '{dependentRepoUrl}'. Service accounts list can be found here: https://review.docs.microsoft.com/en-us/engineering/projects/ops/engdocs/how-to-grant-service-account-permission-in-your-repository?branch=master#{repoOrg?.ToLowerInvariant()}. For any support, please open a ticket in https://SiteHelp."
+    comment: >2
+       <summary>
+                  /// Service accounts do not have 'Write' permissions on CRR.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  repository-owner-permission-insufficient:
+    level: ErrorLevel.Error
+    message: "Docs Build cannot access CRR repo {dependentRepoUrl} using the access token from user {repoOwner} because {repoOwner} does not have Read access to the CRR repo. Please ask {repoOwner} to contact the admins of the CRR repo {dependentRepoUrl} to get Read permission. Don't know who to contact? This page contains admin information of the CRR repo if it is owned by Microsoft: https://repos.opensource.microsoft.com/{dependentRepoOrg}/repos/{dependentRepoName}/permissions/"
+    comment: >2
+       <summary>
+                  /// Repository owner does not have 'Read' permission on CRR.
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+  dependency-repository-branch-not-match:
+    level: ErrorLevel.Suggestion
+    message: The branch({branch}) used to reference in the dependency repository '{repoUrl}' does not match. Please confirm with cross reference repo and update '{branch}' to '{fallbackBranch}' in this repo config file.
+    comment: >2
+       <summary>
+                  /// The branch used to reference the dependency repository doesn't match the real used branch
+                  /// </summary>
+                  /// Behavior: ✔️ Message: ✔️
+Template:
+  liquid-not-found:
+    level: ErrorLevel.Warning
+    message: Liquid template is not found for mime type '{source}', the output HTML will not be generated.
+    comment: >2
+       <summary>
+                  /// Liquid is not found for current mime type.
+                  /// </summary>
+                  /// Behavior: ❌ Message: ❌
+  mustache-not-found:
+    level: ErrorLevel.Warning
+    message: Mustache template is not found at '{templateFileName}'.
+    comment: >2
+       <summary>
+                  /// Mustache is not found for current mime type.
+                  /// </summary>
+                  /// Behavior: ❌ Message: ❌
+SourceMap:
+  duplicate-source-map-item:
+    level: ErrorLevel.Warning
+    message: "'{key}' is duplicated from {StringUtility.Join(originalFiles)}"
+    comment: ''
