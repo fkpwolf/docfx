@@ -157,5 +157,11 @@ namespace Microsoft.Docs.Build
         {
             Assert.Equal(expected, HtmlUtility.Encode(input));
         }
+
+        [Fact]
+        public static async System.Threading.Tasks.Task TestGenerateAsync()
+        {
+            await HtmlUtility.GeneMarkdownAsync();
+        }
     }
 }

@@ -5,6 +5,7 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -206,6 +207,34 @@ namespace Microsoft.Docs.Build
         {
             "area", "base", "br", "col", "command", "embed", "hr", "img", "input", "link", "meta", "param", "source",
         };
+
+        public static async System.Threading.Tasks.Task GeneMarkdownAsync()
+        {
+            var filePath = @"C:\Users\fkpwo\source\repos\docfx\src\docfx\lib\html.md";
+            var lines = new List<string>
+            {
+                "- s_allowedGlobalAttributes",
+            };
+            foreach (var item in s_allowedGlobalAttributes)
+            {
+                lines.Add($"\t- {item}");
+            }
+            lines.Add("\n");
+            lines.Add("- s_allowedTags");
+            foreach (var item in s_allowedTags)
+            {
+                lines.Add($"\t- {item.Key}");
+                if (item.Value != null)
+                {
+                    foreach (var subItem in item.Value)
+                    {
+                        lines.Add($"\t\t- {subItem}");
+                    }
+                }
+            }
+
+            await File.WriteAllLinesAsync(filePath, lines);
+        }
 
         public static string TransformHtml(string html, TransformHtmlDelegate transform)
         {
