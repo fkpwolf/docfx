@@ -1,4 +1,4 @@
-- - allowedDomain
+- allowedDomain
 	- a
 		- assetId:*
 		- about:*
