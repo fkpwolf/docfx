@@ -11,6 +11,7 @@ using System.Text;
 using System.Web;
 using HtmlReaderWriter;
 using Markdig.Syntax;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Docs.Build
@@ -229,6 +230,27 @@ namespace Microsoft.Docs.Build
                     foreach (var subItem in item.Value)
                     {
                         lines.Add($"\t\t- {subItem}");
+                    }
+                }
+            }
+
+            // trusted-domains.json
+            var jsonPath = @"C:\Users\fkpwo\source\repos\docfx\src\docfx\data\docs\trusted-domains.json";
+            lines.Add("\n");
+            lines.Add("- s_allowedDomain");
+            using (var file = File.OpenText(jsonPath))
+            {
+                var serializer = new JsonSerializer();
+                var domains = (Dictionary<string, HashSet<string>?>)serializer.Deserialize(file, typeof(Dictionary<string, HashSet<string>?>));
+                foreach (var item in domains)
+                {
+                    lines.Add($"\t- {item.Key}");
+                    if (item.Value != null)
+                    {
+                        foreach (var subItem in item.Value)
+                        {
+                            lines.Add($"\t\t- {subItem}");
+                        }
                     }
                 }
             }

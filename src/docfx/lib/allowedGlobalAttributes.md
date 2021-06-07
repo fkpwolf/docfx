@@ -1,0 +1,14 @@
+- allowedGlobalAttributes
+	- name
+	- id
+	- class
+	- itemid
+	- itemprop
+	- itemref
+	- itemscope
+	- itemtype
+	- part
+	- slot
+	- spellcheck
+	- title
+	- role
